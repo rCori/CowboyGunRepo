@@ -19,7 +19,7 @@ public class FollowCamera : MonoBehaviour {
 
 		if(playerScreenPoint.x < 0.25f) {
             //Move camera so it's not
-            Vector3 target = cam.ViewportToWorldPoint(new Vector3(0.3f, 0.0f));
+            Vector3 target = cam.ViewportToWorldPoint(new Vector3(0.25f, 0.0f));
             Vector3 translationVector = new Vector3(Subject.transform.position.x - target.x, 0.0f, 0.0f);
             cam.transform.Translate(translationVector);
         }

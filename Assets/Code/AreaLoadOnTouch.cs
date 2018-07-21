@@ -4,8 +4,20 @@ using UnityEngine;
 
 public class AreaLoadOnTouch : MonoBehaviour {
 
-    public List<GameObject> Locations;
-    public List<GameObject> PrefabsToLoad;
+    [System.Serializable]
+    public class AddObject {
+        public string resourceName;
+        public Vector2 location;
+        public string tag;
+    }
+
+    //public List<GameObject> Locations;
+    //public List<GameObject> PrefabsToLoad;
+
+    public List<AddObject> addObjects;
+    public List<string> removeTags;
+
+    public InGameAreaLoader inGameAreaLoader;
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +30,7 @@ public class AreaLoadOnTouch : MonoBehaviour {
 	}
 
     private void OnTriggerEnter2D(Collider2D collision) {
+        /*
         if(collision.tag == "Player") {
             Debug.Log("LoadingS Stuff");
             for(int i = 0; i<PrefabsToLoad.Count; i++) {
@@ -26,6 +39,14 @@ public class AreaLoadOnTouch : MonoBehaviour {
                 prefab.transform.position = location.position;
                 Instantiate(prefab);
             }
+        }
+        */
+        foreach(AddObject addObject in addObjects) {
+            inGameAreaLoader.AddToScene(addObject.location, addObject.resourceName,addObject.tag);
+        }
+
+        foreach(string tag in removeTags) {
+            inGameAreaLoader.RemoveFromScene(tag);
         }
     }
 }
