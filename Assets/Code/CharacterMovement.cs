@@ -16,13 +16,14 @@ public class CharacterMovement : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         currentMovement = new Vector2(0f,0f);
         lastDirection = new Vector2(1.0f, 0.0f);
-        CharacterShooting.Fire += GetCurrentMovement;
+        CharacterShooting.Fire += GetLastDirection;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         float horiz = Input.GetAxisRaw("Horizontal");
         float vert = Input.GetAxisRaw("Vertical");
+
 
         if(currHoriz != horiz || currVert != vert) {
             MoveOnInput(horiz, vert);
@@ -36,16 +37,21 @@ public class CharacterMovement : MonoBehaviour {
 
         currentMovement.x = horiz;
         currentMovement.y = vert;
-        currentMovement.Normalize();
-        currentMovement *= Time.deltaTime * speed;
-        if(currentMovement.x != 0.0f && currentMovement.y != 0.0f) {
+        currentMovement = currentMovement.normalized;
+        if(horiz != 0.0f || vert != 0.0f) {
             lastDirection = currentMovement;
+            Debug.Log("Last Direction:" + lastDirection);
         }
+        currentMovement *= speed;
         rb.velocity = currentMovement;
     }
 
-    public Vector2 GetCurrentMovement() {
-        return currentMovement;
+    public Vector2 GetLastDirection() {
+        return lastDirection;
     }
 
+
+    private void OnDestroy() {
+        CharacterShooting.Fire -= GetLastDirection;
+    }
 }

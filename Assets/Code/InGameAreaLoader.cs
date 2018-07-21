@@ -41,7 +41,7 @@ public class InGameAreaLoader : MonoBehaviour {
 
 
     public void AddToScene(Vector2 location, string resourceName, string tag) {
-        Debug.Log("Attempting to load object: " + resourceName);
+        //Debug.Log("Attempting to load object: " + resourceName);
         GameObject gameObject = (GameObject)Resources.Load(resourceName, typeof(GameObject));
         Assert.IsNotNull(gameObject);
         gameObject.transform.position = location;
@@ -51,13 +51,17 @@ public class InGameAreaLoader : MonoBehaviour {
     }
 
     public void RemoveFromScene(string tag) {
+        List<DynamicLoadingGameObject> removalList = new List<DynamicLoadingGameObject>();
         foreach(DynamicLoadingGameObject removalAsset in currentLoaded) {
             //Remove all assets with given tag
             if(removalAsset.loadTag == tag && gameObject != null) {
-                Debug.Log("Removing  gameObject: " + gameObject.name);
+                //Debug.Log("Removing  gameObject: " + gameObject.name);
                 Destroy(removalAsset.gameObject);
             }
+            removalList.Add(removalAsset);
         }
-    
+        foreach(DynamicLoadingGameObject toBeRemoved in removalList) {
+            currentLoaded.Remove(toBeRemoved);
+        }
     } 
 }
