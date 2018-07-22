@@ -10,10 +10,12 @@ public class CharacterMovement : MonoBehaviour {
     public float speed = 3.0f;
     private float currHoriz = 0.0f;
     private float currVert = 0.0f;
+    Animator animator;
 
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         currentMovement = new Vector2(0f,0f);
         lastDirection = new Vector2(1.0f, 0.0f);
         CharacterShooting.Fire += GetLastDirection;
@@ -40,7 +42,11 @@ public class CharacterMovement : MonoBehaviour {
         currentMovement = currentMovement.normalized;
         if(horiz != 0.0f || vert != 0.0f) {
             lastDirection = currentMovement;
+            animator.SetBool("IsMoving", true);
             //Debug.Log("Last Direction:" + lastDirection);
+        }
+        else {
+            animator.SetBool("IsMoving", false);
         }
         currentMovement *= speed;
         rb.velocity = currentMovement;
