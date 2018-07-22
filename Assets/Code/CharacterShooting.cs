@@ -9,10 +9,13 @@ public class CharacterShooting : MonoBehaviour {
     private AudioSource audioSource;
 
     private GameObject currentBullet;
+    private bool playerDead;
 
 	// Use this for initialization
 	void Start () {
+        playerDead = false;
         audioSource = GetComponent<AudioSource>();
+        PlayerHealth.playerDiedEvent += PlayerHasDied;
 	}
 	
     public delegate Vector2 FireDelegate();
@@ -20,6 +23,8 @@ public class CharacterShooting : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        //If the player has died then return.
+        if (playerDead) return;
 		if(Input.GetButtonDown("Fire1")) {
             FireBullet();
         }
@@ -38,6 +43,14 @@ public class CharacterShooting : MonoBehaviour {
             PlayerBullet playerBullet = currentBullet.GetComponent<PlayerBullet>();
             playerBullet.Fire(bulletDirection);
         }
+    }
+
+    public void PlayerHasDied() {
+        playerDead = true;
+    }
+
+    private void OnDestroy() {
+        PlayerHealth.playerDiedEvent -= PlayerHasDied;
     }
 
 }

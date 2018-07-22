@@ -12,20 +12,27 @@ public class CharacterMovement : MonoBehaviour {
     private float currVert = 0.0f;
     Animator animator;
 
+    bool playerDead;
+
 	// Use this for initialization
 	void Start () {
+        playerDead = false;
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         currentMovement = new Vector2(0f,0f);
         lastDirection = new Vector2(1.0f, 0.0f);
+
+        //Event Subscriptions
+        PlayerHealth.playerDiedEvent += PlayerHasDied;
         CharacterShooting.Fire += GetLastDirection;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        if (playerDead) return;
+
         float horiz = Input.GetAxisRaw("Horizontal");
         float vert = Input.GetAxisRaw("Vertical");
-
 
         if(currHoriz != horiz || currVert != vert) {
             MoveOnInput(horiz, vert);
@@ -56,8 +63,14 @@ public class CharacterMovement : MonoBehaviour {
         return lastDirection;
     }
 
+    public void PlayerHasDied() {
+        rb.velocity = Vector2.zero;
+        playerDead = true;
+    }
 
+    //Must unsubscribe on destroy for static events
     private void OnDestroy() {
+        PlayerHealth.playerDiedEvent -= PlayerHasDied;
         CharacterShooting.Fire -= GetLastDirection;
     }
 }
