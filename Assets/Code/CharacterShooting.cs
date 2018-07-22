@@ -23,7 +23,7 @@ public class CharacterShooting : MonoBehaviour {
     private void FireBullet() {
         GameObject bullet = Resources.Load("Prefabs/PlayerBullet") as GameObject;
         Vector2 bulletDirection = Fire();
-        Debug.Log("Bullet Direction:" + bulletDirection);
+       // Debug.Log("Bullet Direction:" + bulletDirection);
         Assert.IsNotNull(bullet);
         bullet.transform.position = gameObject.transform.position;
         bullet = Instantiate(bullet);

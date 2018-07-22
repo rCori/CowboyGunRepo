@@ -40,7 +40,7 @@ public class CharacterMovement : MonoBehaviour {
         currentMovement = currentMovement.normalized;
         if(horiz != 0.0f || vert != 0.0f) {
             lastDirection = currentMovement;
-            Debug.Log("Last Direction:" + lastDirection);
+            //Debug.Log("Last Direction:" + lastDirection);
         }
         currentMovement *= speed;
         rb.velocity = currentMovement;
